@@ -1,0 +1,25 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import connectDB from "./utils/connectDB.js";
+import { router } from "./routes/userRoutes.js";
+
+dotenv.config();
+const app = express();
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(express.json());
+const port = process.env.PORT || 8081;
+
+//Run database
+connectDB();
+
+//Run Routes
+app.use("/api/v1/rent/user", router);
+
+//Connection
+app.listen(port, () => {
+  console.log(`App running on port: ${port}`);
+});
