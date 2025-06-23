@@ -10,6 +10,8 @@ import {
   resetPassword,
 } from "../controllers/authController.js";
 
+import { getProperty } from "../controllers/propertyController.js";
+
 const router = express.Router();
 
 router.route("/signup").post(signup);

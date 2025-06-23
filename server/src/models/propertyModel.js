@@ -8,7 +8,7 @@ const propertySchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, "please add information about your property"],
+    required: [true, "please add information about your property"], // Fixed missing quote
   },
   extraInfo: {
     type: String,
@@ -61,7 +61,7 @@ const propertySchema = new mongoose.Schema({
       validator: function (arr) {
         return arr.length >= 5;
       },
-      message: "The images array must contain atleast 5 images",
+      message: "The images array must contain at least 5 images",
     },
   },
   price: {
@@ -84,13 +84,12 @@ const propertySchema = new mongoose.Schema({
       fromDate: Date,
       toDate: Date,
       userId: {
-        typr: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId, // Corrected from 'typr'
         ref: "User",
       },
     },
   ],
   userId: {
-    // who created the property
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
@@ -100,14 +99,17 @@ const propertySchema = new mongoose.Schema({
 });
 
 propertySchema.pre("save", function (next) {
-  this.slugify(this.propertyName, { lower: true });
+  this.slug = slugify(this.propertyName, { lower: true });
+  next();
 });
 
 propertySchema.pre("save", function (next) {
-  this.address.city = this.address.city.toLowerCase().replace(" ", "");
+  if (this.address && this.address.city) {
+    this.address.city = this.address.city.toLowerCase().replace(/\s+/g, "");
+  }
   next();
 });
 
 const Property = mongoose.model("Property", propertySchema);
 
-exports = { Property };
+export { Property };

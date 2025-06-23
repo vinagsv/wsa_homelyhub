@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./utils/connectDB.js";
 import { router } from "./routes/userRoutes.js";
+import { propertyRouter } from "./routes/propertyRouter.js";
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ connectDB();
 
 //Run Routes
 app.use("/api/v1/rent/user", router);
+app.use("/api/v1/rent/listing", propertyRouter);
 
 //Connection
 app.listen(port, () => {
