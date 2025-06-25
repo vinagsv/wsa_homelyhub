@@ -249,6 +249,21 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const check = async (req, res) => {
+  try {
+    res.status(200).json({
+      status: "success",
+      message: "User Logged In",
+      user: req.user,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: fail,
+      message: "UnAuthorized",
+    });
+  }
+};
+
 export {
   signup,
   login,
@@ -258,4 +273,5 @@ export {
   updatePassword,
   forgotPassword,
   resetPassword,
+  check,
 };
