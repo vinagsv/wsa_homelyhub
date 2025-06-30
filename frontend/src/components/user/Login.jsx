@@ -4,6 +4,7 @@ import "../../CSS/Login.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getLogin } from "../../store/Users/user-action";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../Loadingspinner";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -32,6 +33,8 @@ const Login = () => {
     <Fragment>
       <div className="row wrapper">
         <div className="col-10 col-lg-5">
+          {loading && <LoadingSpinner />}
+
           <form onSubmit={submitHandler}>
             <h1 className="mb-3">Login</h1>
             <div className="form-group">
@@ -56,7 +59,7 @@ const Login = () => {
               />
             </div>
 
-            <Link to="#" className="float-right mb-4">
+            <Link to="/user/forgotPassword" className="float-right mb-4">
               Forgot Password?
             </Link>
 

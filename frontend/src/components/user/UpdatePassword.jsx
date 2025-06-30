@@ -1,18 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { updatePassword } from "../../store/Users/user-action";
+import { userActions } from "../../store/Users/user-slice";
+import { useNavigate } from "react-router-dom";
 
 const UpdatePassword = () => {
-  const [oldPassword, setOldPassword] = useState("");
+  const [passwordCurrent, setPasswordCurrent] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const dispatch = useDispatch();
+  const {errors,success}= useSelector((state)=> state.user);
+  const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.set("oldPassword", oldPassword);
-    formData.set("password", password);
-    formData.set("passwordConfirm", passwordConfirm);
+    if(password !== passwordConfirm){
+      toast.error("password doent match")
+      return false;
+    }else{
+      dispatch(updatePassword({passwordCurrent,password,passwordConfirm}))
+    }
+    console.log({passwordCurrent,password,passwordConfirm})
   };
+
+  useEffect(() => {
+    if(errors){
+      dispatch(userActions.clearError())
+    }else if(success){
+      toast.success("password Updated Sucessfuly")
+      navigate("/profile");
+      dispatch(userActions.getPasswordSuccess(false));
+    }
+  }, [errors,dispatch,navigate,success]);
+  
 
   return (
     <>
@@ -23,18 +44,18 @@ const UpdatePassword = () => {
           <form onSubmit={submitHandler}>
             <h1 className="password_title">Update Password</h1>
             <div className="form-group">
-              <label for="old_password_field">Old Password</label>
+              <label htmlFor="old_password_field">Old Password</label>
               <input
                 type="password"
                 id="old_password_field"
                 className="form-control"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
+                value={passwordCurrent}
+                onChange={(e) => setPasswordCurrent(e.target.value)}
               />
             </div>
 
             <div className="form-group">
-              <label for="new_password_field">New Password</label>
+              <label htmlFor="new_password_field">New Password</label>
               <input
                 type="password"
                 id="new_password_field"

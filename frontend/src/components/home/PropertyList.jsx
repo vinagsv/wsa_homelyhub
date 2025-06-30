@@ -16,9 +16,7 @@ const Card = ({ image, name, address, price }) => {
           <h5>{name}</h5>
 
           <h6>
-            <span className="material-symbols-outlined houseicon">
-              home_pin
-            </span>
+            <span className="material-symbols-outlined houseicon">home_pin</span>
             {address}
           </h6>
           <p>

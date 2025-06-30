@@ -1,11 +1,17 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate,  } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getSignup } from "../../store/Users/user-action";
+import { useDispatch, useSelector } from "react-redux";
+import { userActions } from "../../store/Users/user-slice";
+
 // import "../../CSS/Login.css";
 
 const Signup = () => {
-  //   const navigate = useNavigate();
-  //   const location = useLocation();
-  const [user, setUser] = useState({
+const dispatch = useDispatch();
+const navigate = useNavigate();
+const {isAuthenticated, errors} = useSelector((state)=> state.user);
+const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
@@ -15,45 +21,44 @@ const Signup = () => {
 
   const { name, email, password, passwordConfirm, phoneNumber } = user;
 
-  const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState(
-    "/images/default_avatar.png"
-  );
+  
 
   const submitHandler = (e) => {
     e.preventDefault();
     // Check if password and confirm password match
     if (password !== passwordConfirm) {
-      alert.error("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
+    dispatch(getSignup(user));
 
-    const formData = new FormData();
-    formData.set("name", name);
-    formData.set("email", email);
-    formData.set("password", password);
-    formData.set("passwordConfirm", passwordConfirm);
-    formData.set("phoneNumber", phoneNumber);
-    formData.set("avatar", avatar);
+  //   const formData = new FormData();
+  //   formData.set("name", name);
+  //   formData.set("email", email);
+  //   formData.set("password", password);
+  //   formData.set("passwordConfirm", passwordConfirm);
+  //   formData.set("phoneNumber", phoneNumber);
+  //   formData.set("avatar", avatar);
 
-    console.log(formData);
+  //   console.log(formData);
   };
-  const onChange = (e) => {
-    if (e.target.name === "avatar") {
-      const reader = new FileReader();
 
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setAvatarPreview(reader.result);
-          setAvatar(reader.result);
-        }
-      };
+const onChange = (e) => {
+  setUser({ ...user, [e.target.name]: e.target.value });
+};
 
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      setUser({ ...user, [e.target.name]: e.target.value });
-    }
-  };
+useEffect(() => {
+  if (errors && errors.length > 0) {
+    toast.error(errors);
+    dispatch(userActions.clearError());
+  } else if (isAuthenticated) {
+    navigate("/");
+    toast.success("User signup successfully");
+  }
+}, [isAuthenticated, errors, navigate, dispatch]);
+
+
+
 
   return (
     <Fragment>

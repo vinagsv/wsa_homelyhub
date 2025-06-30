@@ -17,24 +17,30 @@ import EditProfile from "./components/user/EditProfile";
 import MyBookings from "./components/mybookings/MyBookings";
 import BookingDetails from "./components/myBookings/BookingDetails";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { userActions } from "./store/Users/user-slice";
-import { currentUser } from "./store/Users/user-action";
-import { ToastContainer, toast } from "react-toastify";
+import { useEffect } from "react";
+import { CurrentUser } from "./store/Users/user-action";
+import AccomodationForm from "./components/accomodation/AccomodationForm";
+import ForgetPassword from "./components/user/ForgetPassword";
+import ResetPassword from "./components/user/ResetPassword";
+import UpdatePassword from "./components/user/UpdatePassword";
 
 function App() {
   const dispatch = useDispatch();
-  const { errors } = useSelector((state) => state.user);
+  const { errors, user, isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (errors) {
-      dispatch(userActions.clearErrors());
+      dispatch(userActions.clearError());
     }
   }, [errors, dispatch]);
 
   useEffect(() => {
-    dispatch(currentUser());
+    dispatch(CurrentUser());
   }, []);
+
+  console.log(user);
+  console.log(isAuthenticated);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -58,6 +64,30 @@ function App() {
           element={<Accomodation />}
         />
         <Route
+          id="accommodation-form"
+          path="accommodation-form"
+          element={<AccomodationForm />}
+        />
+
+        <Route
+          id="forgotpassword"
+          path="user/forgotpassword"
+          element={<ForgetPassword />}
+        />
+
+        <Route
+          id="resetpassword"
+          path="user/resetpassword/:token"
+          element={<ResetPassword />}
+        />
+
+        <Route
+          id="updatepassword"
+          path="user/updatepassword"
+          element={<UpdatePassword />}
+        />
+
+        <Route
           id="mybookings"
           path="user/mybookings"
           element={<MyBookings />}
@@ -74,7 +104,6 @@ function App() {
     <div className="App">
       {/* <Home /> */}
       <RouterProvider router={router} />
-      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }

@@ -16,7 +16,7 @@ const PropertyListing = () => {
         Cider Chalet-F: 2BRK MountainView Apartment
       </p>
       <h6 className="property-location">
-        <span class="material-symbols-outlined">house</span>
+        <span className="material-symbols-outlined">house</span>
         <span className="location">Manali, Himachal Pradesh, India</span>
       </h6>
       <PropertyImg />

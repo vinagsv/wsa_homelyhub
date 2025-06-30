@@ -9,7 +9,7 @@ import { propertyRouter } from "./routes/propertyRouter.js";
 dotenv.config();
 const app = express();
 app.use(cors({ origin: process.env.ORIGIN_ACCESS_URL, credentials: true }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 app.use(express.json());
 const port = process.env.PORT || 8081;
