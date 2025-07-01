@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// import { getAllPropertys } from "../../Store/Property/property-action";
-// import "../../CSS/Home.css";
+import { propertyAction } from "../../store/property/property-slice";
+import { getAllProperties } from "../../store/property/property-action";
+import gsap from "gsap";
 
-const Card = ({ image, name, address, price }) => {
+import "../../CSS/Home.css";
+
+const Card = ({ id, image, name, address, price }) => {
   return (
     <figure className="property">
-      <Link to="/propertylist">
+      <Link to={`/propertylist/${id}`}>
         <img src={image} alt="Propertyimg" />
       </Link>
       <h4>{name}</h4>
@@ -16,7 +20,9 @@ const Card = ({ image, name, address, price }) => {
           <h5>{name}</h5>
 
           <h6>
-            <span className="material-symbols-outlined houseicon">home_pin</span>
+            <span className="material-symbols-outlined houseicon">
+              home_pin
+            </span>
             {address}
           </h6>
           <p>
@@ -29,99 +35,83 @@ const Card = ({ image, name, address, price }) => {
 };
 
 const PropertyList = () => {
-  // const propertys = useSelector((state) => state.propertys);
-  // console.log(propertys);
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getAllPropertys());
-  // }, [dispatch]);
+  const [currentPage, setCurrentPage] = useState({ page: 1 });
+  const { properties, totalProperties } = useSelector(
+    (state) => state.properties
+  );
+  const dispatch = useDispatch();
+  const lastPage = Math.ceil(totalProperties / 12);
+  const propertyListRef = useRef(null);
 
-  const cardsData = [
-    {
-      id: 1,
-      image: "/assets/image1.jpeg",
-      name: "Delightful farm cottage - Mysore",
-      address: "Mysuru, Karnataka, India",
-      price: 1999,
-    },
-    {
-      id: 2,
-      image: "/assets/property2.webp",
-      name: "Delightful farm cottage - Mysore",
-      address: "Manali, Himachal Pradesh, India",
-      price: 2999,
-    },
+  useEffect(() => {
+    const fetchProperties = async (page) => {
+      dispatch(propertyAction.updateSeaechparams(page));
+      dispatch(getAllProperties());
+    };
 
-    {
-      id: 3,
-      image: "/assets/property3.webp",
-      name: "Delightful farm cottage - Mysore",
-      address: "chennai, Tamil nadu, India",
-      price: 2999,
-    },
-    {
-      id: 4,
-      image: "/assets/property4.webp",
-      name: "Delightful farm cottage - Mysore",
-      address: "cochin, Kerala, India",
-      price: 2999,
-    },
-    {
-      id: 5,
-      image: "/assets/property5.webp",
-      name: "Delightful farm cottage - Mysore",
-      address: "Manali, Himachal Pradesh, India",
-      price: 2999,
-    },
-    {
-      id: 6,
-      image: "/assets/property6.webp",
-      name: "Delightful farm cottage - Mysore",
-      address: "Manali, Himachal Pradesh, India",
-      price: 2999,
-    },
-    {
-      id: 7,
-      image: "/assets/property7.webp",
-      name: "Delightful farm cottage - Mysore",
-      address: "Manali, Himachal Pradesh, India",
-      price: 2999,
-    },
-    {
-      id: 8,
-      image: "/assets/image1.jpeg",
-      name: "Delightful farm cottage - Mysore",
-      address: "Manali, Himachal Pradesh, India",
-      price: 2999,
-    },
-    {
-      id: 9,
-      image: "/assets/image1.jpeg",
-      name: "Delightful farm cottage - Mysore",
-      address: "Manali, Himachal Pradesh, India",
-      price: 2999,
-    },
-    {
-      id: 10,
-      image: "/assets/image1.jpeg",
-      name: "Delightful farm cottage - Mysore",
-      address: "Manali, Himachal Pradesh, India",
-      price: 2999,
-    },
-  ];
+    fetchProperties(currentPage);
+  }, [currentPage, dispatch]);
+
+  useEffect(() => {
+    if (propertyListRef.current) {
+      gsap.fromTo(
+        propertyListRef.current.children,
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power2.out" }
+      );
+    }
+  }, [properties]);
 
   return (
-    <div className="propertylist">
-      {cardsData.map((card) => (
-        <Card
-          key={card.id}
-          image={card.image}
-          name={card.name}
-          address={card.address}
-          price={card.price}
-        />
-      ))}
-    </div>
+    <>
+      {properties.length === 0 ? (
+        <p className="not_found">Property not FOund...</p>
+      ) : (
+        <div className="propertylist" ref={propertyListRef}>
+          {properties.map((property) => (
+            <Card
+              key={property._id}
+              id={property._id}
+              image={property.images[0].url}
+              name={property.propertyName}
+              address={`${property.address.city},${property.address.state},${property.address.pincode}`}
+              price={property.price}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Pagination */}
+      <div className="pagination">
+        <button
+          className="previous_btn"
+          onClick={() =>
+            setCurrentPage((prev) => ({
+              page: prev.page - 1,
+            }))
+          }
+          disabled={currentPage.page === 1}
+        >
+          <span className="materials-symbols-outlined">
+            arrow_back_ios_new{""}
+          </span>
+        </button>
+
+        <button
+          className="next_btn"
+          onClick={() =>
+            setCurrentPage((prev) => ({
+              page: prev.page + 1,
+            }))
+          }
+          disabled={properties.length < 12 || currentPage.page === lastPage}
+        >
+          <span className="materials-symbols-outlined">
+            arrow_forward_ios{""}
+          </span>
+        </button>
+      </div>
+    </>
   );
 };
 

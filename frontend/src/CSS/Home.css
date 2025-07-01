@@ -166,3 +166,58 @@ figure:hover main {
 footer {
   display: none;
 }
+
+/* ================= */
+Home.css pagination {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 1rem;
+
+  margin-top: 2rem;
+}
+
+.previous_btn,
+.next_btn {
+  background-color: #3b82f6; /*
+
+Blue-500 */
+
+  color: white;
+
+  border: none;
+
+  padding: 0.6rem 1.2rem;
+
+  border-radius: 0.5rem;
+
+  font-size: 1rem;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.previous_btn:disabled,
+.next_btn:disabled {
+  background-color: #a5b4fc; /* Lighter blue when disabled */
+  cursor: not-allowed;
+}
+
+.previous_btn:hover:not(:disable d),
+.next_btn:hover:not(:disabled) {
+  background-color: #2563eb; /* Darker blue on hover */
+}
+
+.material-symbols-outlined {
+  font-size: 1.2rem;
+}
