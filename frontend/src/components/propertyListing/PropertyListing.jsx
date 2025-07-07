@@ -7,30 +7,50 @@ import PropertyAmenities from "./PropertyAmenities";
 import PropertMapInfo from "./PropertyMapInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { getPropertyDetails } from "../../store/PropertyDetails/PropertyDetails-action";
+import PropertyMapInfo from "./PropertyMapInfo";
 // import { getPropertyList } from "../../Store/PropertyListing/propertylist-action";
 
 const PropertyListing = () => {
+  const dispatch = useDispatch();
+  const {id} = useParams();
+  const { loading, propertydetails } = useSelector(
+    (state) => state.propertydetails
+  );
+
+  console.log("propertyDetails", propertydetails);
+  console.log(id);
+
+  useEffect(()=>{
+    dispatch(getPropertyDetails(id));
+  },[dispatch,id]);
+
+  if (loading || !propertydetails || !propertydetails.address) {
+    return <div className="loader">Loading property details...</div>;
+  }
+
+  const {propertyName,address,description,images,amenities,maximumGuest,price,currentBookings} = propertydetails;
+
+
   return (
     <div className="property-container">
-      <p className="property-header">
-        Cider Chalet-F: 2BRK MountainView Apartment
+      <p className="property-header" >
+       {propertyName}
       </p>
       <h6 className="property-location">
         <span className="material-symbols-outlined">house</span>
-        <span className="location">Manali, Himachal Pradesh, India</span>
+        <span className="location"> {`${address.area}, ${address.city}, ${address.state} - ${address.pincode}`}</span>
       </h6>
-      <PropertyImg />
+      <PropertyImg images={images} />
       <div className="middle-container row">
         <div className="des-and-amenities col-md-8 col-sm-12 col-12">
           <h2 className="property-description-header">Description</h2>
           <p className="property-description">
-            Ménage - By The Beas , A colonial style hill cottage near Manali,
-            this delightful vacation home promises the perfect mix of hills with
-            a scenic river side in the privacy of your own space. <br></br>
-            <br></br>Max number of guests: 4
+            {description} <br></br>
+            <br></br>Max number of guests:{maximumGuest}
           </p>
           <hr></hr>
-          <PropertyAmenities />
+          <PropertyAmenities amenities={amenities} />
         </div>
         <div className="property-payment col-md-4 col-sm-12 col-12">
           <PaymentForm />
@@ -39,7 +59,7 @@ const PropertyListing = () => {
       <hr></hr>
       <div className="property-map">
         <div className="map-image-exinfo-container row">
-          <PropertMapInfo />
+          <PropertyMapInfo address={address}/>
         </div>
       </div>
     </div>

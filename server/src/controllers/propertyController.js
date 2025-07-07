@@ -1,17 +1,28 @@
-import { Property } from "../Models/propertyModel.js";
+import { Property } from "../models/propertyModel.js"; 
 import { APIFeatures } from "../utils/APIFeatures.js";
+import imagekit from "../utils/imagekitIO.js";
 
 const getProperty = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
-    res.status(200).json({
-      status: "success",
-      data: property,
-    });
-  } catch (error) {
+
+    if (property) {
+      return res.status(200).json({
+        status: "success",
+        data: property,
+      });
+    }
+
     res.status(404).json({
       status: "fail",
-      message: error.message,
+      message: "Property not found",
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Server Error",
+      error: error.message,
     });
   }
 };
@@ -31,18 +42,25 @@ const createProperty = async (req, res) => {
       maximumGuest,
       price,
       images,
-    } = req.body();
+    } = req.body; 
 
-    const uploadImages = [];
+    
+    const uploadedImages = [];
 
     for (const image of images) {
       const result = await imagekit.upload({
-        file: image.url,
+        file: image.url, 
         fileName: `property_${Date.now()}.jpg`,
         folder: "property_images",
       });
-      uploadImages.push({ url: result.url, public_id: result.fileId });
+
+      uploadedImages.push({
+        url: result.url,
+        public_id: result.fileId,
+      });
     }
+
+    
     const newProperty = await Property.create({
       propertyName,
       description,
@@ -55,57 +73,58 @@ const createProperty = async (req, res) => {
       checkOutTime,
       maximumGuest,
       price,
-      images: uploadImages,
-      userId: req.user.id,
+      images: uploadedImages,
+      userId: req.userId, 
     });
 
-    res.status(200).json({ status: "success", data: { data: newProperty } });
-  } catch (error) {
-    console.log("Error in fetching the data");
-    res.status(404).json({
-      status: "fail",
-      message: error.message,
-    });
-  }
-};
-
-const getProperties = async (req, res) => {
-  try {
-    const features = new APIFeatures(Property.find(), req.query)
-      .filter()
-      .search()
-      .paginate();
-
-    const allProperties = await Property.find();
-    const doc = await features.query;
-
-    res.status(200).json({
+    
+    res.status(201).json({
       status: "success",
-      no_of_responses: doc.length,
-      all_properties: allProperties.length,
-      data: doc,
+      data: newProperty,
     });
   } catch (error) {
-    console.error("Error searching properties:", error);
-    res.status(500).json({ status: "fail", error: "Internal server Error" });
-  }
-};
-
-const getUserProperties = async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const property = await Property.find({ userId });
-    res.status(200).json({
-      status: "success",
-      data: property,
-    });
-  } catch (error) {
-    console.error("Error Fetching your properties", error);
     res.status(500).json({
-      status: "fail",
+      status: "error",
+      message: "Failed to create property",
       error: error.message,
     });
   }
 };
 
-export { getProperty, createProperty, getProperties, getUserProperties };
+const getProperties = async(req,res)=>{
+    try {
+        const features = new APIFeatures(Property.find(),req.query).filter().search().paginate();
+
+        const allProperties = await Property.find();
+        const doc = await features.query;
+
+res.status(200).json({
+    status:"sucess",
+    no_of_responses: doc.length,
+    all_properites:allProperties.length,
+    data:doc,
+});
+    } catch (error) {
+        console.error("Error sreaching Properties:" , error);
+        res.status(500).json({status:"fail", error:"internal server Error"})
+        
+    }
+};
+
+const getUsersProperties =async(req,res)=>{
+    try {
+        const userId = req.user._id;
+        const property = await Property.find({userId});
+        res.status(200).json({
+            status:"succuess",
+            data:property,
+        });
+    } catch (error) {
+        console.error("Error fetching Properties:" , error);
+        res.status(500).json({status:"fail", error:"Error fetching"})
+        
+    }
+}
+
+
+export { getProperty ,createProperty, getProperties,getUsersProperties};

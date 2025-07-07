@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 
-const PropertyImg = () => {
+const PropertyImg = ({ images = [] }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleShowAllPhotos = () => {
@@ -22,45 +22,34 @@ const PropertyImg = () => {
               borderTopLeftRadius: "10px",
               borderBottomLeftRadius: "10px",
             }}
-            src="/assets/image1.jpeg"
+            src={images[0].url}
             alt="houses"
           />
         </div>
-        <div>
-          <img className="images" src="/assets/image2.jpeg" alt="houses" />
-        </div>
-        <div>
-          <img
+        {images.slice(1,4).map((image,index)=>(
+          <div key={index}>
+            <img src={image.url} 
+            alt= {`property-img-${index+2}`}
             className="images"
-            style={{ borderTopRightRadius: "10px" }}
-            src="/assets/image3.jpeg"
-            alt="houses"
-          />
-        </div>
-        <div>
-          <img className="images" src="/assets/image4.jpeg" alt="houses" />
-        </div>
+            />
+          </div>
+        ))}
         <div>
           <img
             className="images"
             style={{ borderBottomRightRadius: "10px" }}
-            src="/assets/image5.jpeg"
-            alt="houses"
+            src={images[5].url}
+            alt="property-img-5"
           />
           <button className=" similar-photos" onClick={handleShowAllPhotos}>
-            <span class="material-symbols-outlined">photo_library</span>
+            <span className="material-symbols-outlined">photo_library</span>
           </button>
         </div>
       </div>
       {isModalOpen && (
         <Modal
-          images={[
-            "/assets/image1.jpeg",
-            "/assets/image2.jpeg",
-            "/assets/image3.jpeg",
-            "/assets/image4.jpeg",
-            "/assets/image5.jpeg",
-          ]}
+          images={images
+          }
           onClose={handleCloseModal}
         />
       )}

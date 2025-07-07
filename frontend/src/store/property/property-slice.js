@@ -18,7 +18,7 @@ const propertySlice = createSlice({
       state.totalProperties = action.payload.all_properties;
       state.loading = false;
     },
-    updateSeaechparams: (state, action) => {
+    updateSearchparams: (state, action) => {
       state.searchParams =
         Object.keys(action.payload).length === 0
           ? {}

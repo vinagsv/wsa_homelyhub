@@ -1,6 +1,9 @@
 // Filter.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FilterModal from "./FilterModal";
+import { useDispatch } from "react-redux";
+import { propertyAction } from "../../store/Property/property-slice";
+import { getAllProperties } from "../../store/Property/property-action";
 
 const Filter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,6 +21,12 @@ const Filter = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(propertyAction.updateSearchparams(selectedFilters));
+    dispatch(getAllProperties());
+  },[selectedFilters,dispatch])
 
   const handleFilterChange = (filterName, value) => {
     setSelectedFilters((prevFilters) => ({

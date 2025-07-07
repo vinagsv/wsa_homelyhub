@@ -1,13 +1,15 @@
-import { propertyAction } from "./property-slice";
+
+import { propertyAction } from "./property-slice"
 import { axiosInstance } from "../../components/utils/axios";
+
 
 export const getAllProperties = () => async (dispatch, getState) => {
   try {
     dispatch(propertyAction.getRequest());
-    const { searchparams } = getState().properties;
+    const { searchParams } = getState().properties;
     // console.log(searchparams)
     const response = await axiosInstance.get(`/api/v1/rent/listing`, {
-      params: { ...searchparams },
+      params: { ...searchParams},
     });
     if (!response) {
       throw new Error("Could not fetch any properties");

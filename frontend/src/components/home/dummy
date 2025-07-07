@@ -1,16 +1,17 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { propertyAction } from "../../store/Property/property-slice";
-import { getAllProperties } from "../../store/Property/property-action";
-import "../../CSS/Home.css";
+import { propertyAction } from "../../store/property/property-slice";
+import { getAllProperties } from "../../store/property/property-action";
 import gsap from "gsap";
 
+import "../../CSS/Home.css";
 
 const Card = ({ id, image, name, address, price }) => {
   return (
     <figure className="property">
-      <Link to={`/propertylist/${id}`}>
+      <Link to={/propertylist/${id}}>
         <img src={image} alt="Propertyimg" />
       </Link>
       <h4>{name}</h4>
@@ -44,7 +45,7 @@ const PropertyList = () => {
 
   useEffect(() => {
     const fetchProperties = async (page) => {
-      dispatch(propertyAction.updateSearchparams(page));
+      dispatch(propertyAction.updateSeaechparams(page));
       dispatch(getAllProperties());
     };
 
@@ -73,7 +74,7 @@ const PropertyList = () => {
               id={property._id}
               image={property.images[0].url}
               name={property.propertyName}
-              address={`${property.address.city},${property.address.state},${property.address.pincode}`}
+              address={${property.address.city},${property.address.state},${property.address.pincode}}
               price={property.price}
             />
           ))}
@@ -91,7 +92,7 @@ const PropertyList = () => {
           }
           disabled={currentPage.page === 1}
         >
-          <span className="material-symbols-outlined">
+          <span className="materials-symbols-outlined">
             arrow_back_ios_new{""}
           </span>
         </button>
@@ -105,8 +106,8 @@ const PropertyList = () => {
           }
           disabled={properties.length < 12 || currentPage.page === lastPage}
         >
-          <span className="material-symbols-outlined">
-            arrow_forward_ios{" "}
+          <span className="materials-symbols-outlined">
+            arrow_forward_ios{""}
           </span>
         </button>
       </div>
@@ -115,4 +116,3 @@ const PropertyList = () => {
 };
 
 export default PropertyList;
-

@@ -4,24 +4,31 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./utils/connectDB.js";
 import { router } from "./routes/userRoutes.js";
-import { propertyRouter } from "./routes/propertyRouter.js";
+import { propertyRouter } from "./routes/propertyRoutes.js";
 
 dotenv.config();
 const app = express();
-app.use(cors({ origin: process.env.ORIGIN_ACCESS_URL, credentials: true }));
+const port = process.env.PORT || 8081;
+
+// Middleware
+app.use(
+  cors({
+    origin: process.env.ORIGIN_ACCESS_URL, // corrected spelling
+    credentials: true,
+  })
+);
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 app.use(express.json());
-const port = process.env.PORT || 8081;
 
-//Run database
+// Database
 connectDB();
 
-//Run Routes
+// Routes
 app.use("/api/v1/rent/user", router);
 app.use("/api/v1/rent/listing", propertyRouter);
 
-//Connection
+// Server
 app.listen(port, () => {
   console.log(`App running on port: ${port}`);
 });

@@ -8,12 +8,12 @@ const propertySchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, "please add information about your property"], // Fixed missing quote
+    required: [true, "please add information about your property"],
   },
   extraInfo: {
     type: String,
     default:
-      "Nestled in a tranquil neighborhood, the house exudes an aura of charm and elegance. The exterior is adorned with a harmonious blend of classic and contemporary architectural elements, featuring a beautiful brick facade and a welcoming front porch.As you step inside, you are greeted by a spacious, sunlit living room with high ceilings and large windows that invite an abundance of natural light. The hardwood floors add a touch of warmth to the space, complementing the neutral color palette.The kitchen is a chef's dream, equipped with modern appliances, sleek countertops, and ample storage space. It opens up to a cozy dining area, creating a perfect setting for family meals and gatherings.",
+      "Nestled in a tranquil neighborhood, the house exudes an aura of charm and elegance...",
   },
   propertyType: {
     type: String,
@@ -84,7 +84,7 @@ const propertySchema = new mongoose.Schema({
       fromDate: Date,
       toDate: Date,
       userId: {
-        type: mongoose.Schema.Types.ObjectId, // Corrected from 'typr'
+        type: mongoose.Schema.Types.ObjectId, // ✅ Fixed typo here
         ref: "User",
       },
     },
@@ -98,18 +98,19 @@ const propertySchema = new mongoose.Schema({
   checkOutTime: { type: String, default: "13:00" },
 });
 
+// ✅ Generate slug before save
 propertySchema.pre("save", function (next) {
   this.slug = slugify(this.propertyName, { lower: true });
   next();
 });
 
+// ✅ Format city before save
 propertySchema.pre("save", function (next) {
-  if (this.address && this.address.city) {
+  if (this.address?.city) {
     this.address.city = this.address.city.toLowerCase().replace(/\s+/g, "");
   }
   next();
 });
 
 const Property = mongoose.model("Property", propertySchema);
-
-export { Property };
+export { Property }; // ✅ ES Module export
