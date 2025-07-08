@@ -7,11 +7,19 @@
 
 .avatar-profile {
   height: 12rem;
-  width: 13rem;
+  width: 12rem;
   border: 4px solid #090909;
   border-radius: 50%;
   background-color: white;
+  overflow: hidden;
 }
+
+.avatar-profile img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
 .userinfo {
   margin-left: 6rem;
 }
@@ -41,6 +49,7 @@ h2 {
 .buttons {
   display: flex;
 }
+
 .btn:hover {
   background-color: rgba(177, 221, 184, 0.63);
   border-color: rgb(2, 58, 11);
@@ -60,10 +69,21 @@ h2 {
   font-size: larger;
   margin-top: 2rem;
 }
+
 .rounded-circle {
-  width: 50%;
-  margin-left: 2rem;
+  width: 100%;
+  height: 100%;
+  margin-left: 0;
+  object-fit: cover;
 }
+
 .custom-file {
   margin-right: 1rem;
+}
+
+.avatars h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 30rem;
 }
