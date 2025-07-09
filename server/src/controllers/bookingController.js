@@ -2,6 +2,7 @@ import Razorpay from "razorpay";
 import { Property } from "../models/propertyModel.js";
 import { Booking } from "../models/bookingModel.js";
 import crypto from "crypto";
+import moment from "moment";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -84,12 +85,9 @@ const getCheckOutSession = async (req, res) => {
 // 2. cerify the payment and create the booking
 const verifyPaymentAndCreateBooking = async (req, res) => {
   try {
-    const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-      bookingDetails,
-    } = req.body;
+    const { razorpayData, bookingDetails } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      razorpayData;
 
     // verify payment signature
     const body = razorpay_order_id + "|" + razorpay_payment_id;
@@ -117,6 +115,9 @@ const verifyPaymentAndCreateBooking = async (req, res) => {
     //   extract booking details from payment notes or request body
     const { propertyId, fromDate, toDate, guests, totalAmount } =
       bookingDetails;
+    const fromDateMoment = moment(fromDate);
+    const toDateMoment = moment(toDate);
+    const numberOfNights = toDateMoment.diff(fromDateMoment, "days");
 
     // creating booking with payment details
     const booking = await Booking.create({
@@ -125,6 +126,7 @@ const verifyPaymentAndCreateBooking = async (req, res) => {
       guests,
       fromDate,
       toDate,
+      numberOfNights,
       user: req.user._id,
       paymentStatus: "completed",
       razorpayOrderId: razorpay_order_id,

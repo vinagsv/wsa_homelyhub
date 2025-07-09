@@ -4,6 +4,7 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
+  Navigate,
 } from "react-router-dom";
 
 import PropertyList from "./components/home/PropertyList";
@@ -24,22 +25,23 @@ import AccomodationForm from "./components/accomodation/AccomodationForm";
 import ForgetPassword from "./components/user/ForgetPassword";
 import ResetPassword from "./components/user/ResetPassword";
 import UpdatePassword from "./components/user/UpdatePassword";
+import Payment from "./components/Payment/Payment";
 
 function App() {
-  const dispatch = useDispatch()
-  const {errors} = useSelector((state)=>state.user);
+  const dispatch = useDispatch();
+  // const { errors } = useSelector((state) => state.user);
+  const { errors, isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (errors){
+    if (errors) {
       dispatch(userActions.clearError());
     }
-  }, [errors,dispatch])
+  }, [errors, dispatch]);
 
   useEffect(() => {
-    dispatch(CurrentUser())
+    dispatch(CurrentUser());
   }, []);
-  
-  
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="*" element={<Main />} id="main" exact>
@@ -62,27 +64,32 @@ function App() {
           element={<Accomodation />}
         />
         <Route
-           id="accommodation-form"
-           path="accommodation-form"
-           element={<AccomodationForm />}
+          id="accommodation-form"
+          path="accommodation-form"
+          element={<AccomodationForm />}
         />
 
         <Route
-           id="forgotpassword"
-           path="user/forgotpassword"
-           element={<ForgetPassword/>}
+          id="forgotpassword"
+          path="user/forgotpassword"
+          element={<ForgetPassword />}
         />
 
         <Route
-           id="resetpassword"
-           path="user/resetpassword/:token"
-           element={<ResetPassword/>}
+          id="resetpassword"
+          path="user/resetpassword/:token"
+          element={<ResetPassword />}
+        />
+        <Route
+          id="payment"
+          path="payment/:propertyId"
+          element={isAuthenticated ? <Payment /> : <Navigate to={"/login"} />}
         />
 
         <Route
-           id="updatepassword"
-           path="user/updatepassword"
-           element={<UpdatePassword/>}
+          id="updatepassword"
+          path="user/updatepassword"
+          element={<UpdatePassword />}
         />
 
         <Route

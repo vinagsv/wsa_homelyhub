@@ -13,7 +13,7 @@ import PropertyMapInfo from "./PropertyMapInfo";
 
 const PropertyListing = () => {
   const dispatch = useDispatch();
-  const {id} = useParams();
+  const { id } = useParams();
   const { loading, propertydetails } = useSelector(
     (state) => state.propertydetails
   );
@@ -21,25 +21,34 @@ const PropertyListing = () => {
   console.log("propertyDetails", propertydetails);
   console.log(id);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getPropertyDetails(id));
-  },[dispatch,id]);
+  }, [dispatch, id]);
 
   if (loading || !propertydetails || !propertydetails.address) {
     return <div className="loader">Loading property details...</div>;
   }
 
-  const {propertyName,address,description,images,amenities,maximumGuest,price,currentBookings} = propertydetails;
-
+  const {
+    propertyName,
+    address,
+    description,
+    images,
+    amenities,
+    maximumGuest,
+    price,
+    currentBookings,
+  } = propertydetails;
 
   return (
     <div className="property-container">
-      <p className="property-header" >
-       {propertyName}
-      </p>
+      <p className="property-header">{propertyName}</p>
       <h6 className="property-location">
         <span className="material-symbols-outlined">house</span>
-        <span className="location"> {`${address.area}, ${address.city}, ${address.state} - ${address.pincode}`}</span>
+        <span className="location">
+          {" "}
+          {`${address.area}, ${address.city}, ${address.state} - ${address.pincode}`}
+        </span>
       </h6>
       <PropertyImg images={images} />
       <div className="middle-container row">
@@ -53,13 +62,20 @@ const PropertyListing = () => {
           <PropertyAmenities amenities={amenities} />
         </div>
         <div className="property-payment col-md-4 col-sm-12 col-12">
-          <PaymentForm />
+          <PaymentForm
+            propertyId={id}
+            price={price}
+            propertyName={propertyName}
+            address={address}
+            maximumGuest={maximumGuest}
+            currentBookings={currentBookings}
+          />
         </div>
       </div>
       <hr></hr>
       <div className="property-map">
         <div className="map-image-exinfo-container row">
-          <PropertyMapInfo address={address}/>
+          <PropertyMapInfo address={address} />
         </div>
       </div>
     </div>
