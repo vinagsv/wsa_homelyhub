@@ -26,11 +26,11 @@ import ForgetPassword from "./components/user/ForgetPassword";
 import ResetPassword from "./components/user/ResetPassword";
 import UpdatePassword from "./components/user/UpdatePassword";
 import Payment from "./components/Payment/Payment";
+import NotFound from "./components/NotFound";
 
 function App() {
   const dispatch = useDispatch();
-  // const { errors } = useSelector((state) => state.user);
-  const { errors, isAuthenticated } = useSelector((state) => state.user);
+  const { errors, isAuthenticated, user } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (errors) {
@@ -40,74 +40,58 @@ function App() {
 
   useEffect(() => {
     dispatch(CurrentUser());
-  }, []);
+  }, [dispatch]);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="*" element={<Main />} id="main" exact>
-        <Route id="home" index element={<PropertyList />} />
+      <Route path="/" element={<Main />}>
+        <Route index element={<PropertyList />} />
+        <Route path="propertylist/:id" element={<PropertyListing />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="user/forgotpassword" element={<ForgetPassword />} />
+        <Route path="user/resetpassword/:token" element={<ResetPassword />} />
         <Route
-          element={<PropertyListing />}
-          id="propertyListing"
-          path="propertylist/:id"
-          exact
+          path="profile"
+          element={user ? <Profile /> : <Navigate to="/login" />}
         />
-        {/* Login */}
-        <Route id="login" path="login" element={<Login />} />
-        <Route id="signup" path="signup" element={<Signup />} />
-        <Route id="profile" path="profile" element={<Profile />} />
-        <Route id="editprofile" path="editprofile" element={<EditProfile />} />
-        {/* accomendation */}
+        <Route
+          path="editprofile"
+          element={user ? <EditProfile /> : <Navigate to="/login" />}
+        />
         <Route
           id="accomodation"
           path="accomodation"
-          element={<Accomodation />}
+          element={user ? <Accomodation /> : <Navigate to="/login" />}
         />
         <Route
-          id="accommodation-form"
-          path="accommodation-form"
-          element={<AccomodationForm />}
-        />
-
-        <Route
-          id="forgotpassword"
-          path="user/forgotpassword"
-          element={<ForgetPassword />}
-        />
-
-        <Route
-          id="resetpassword"
-          path="user/resetpassword/:token"
-          element={<ResetPassword />}
+          id="accomodationform"
+          path="accomodationform"
+          element={user ? <AccomodationForm /> : <Navigate to="/login" />}
         />
         <Route
-          id="payment"
           path="payment/:propertyId"
-          element={isAuthenticated ? <Payment /> : <Navigate to={"/login"} />}
+          element={user ? <Payment /> : <Navigate to="/login" />}
         />
-
         <Route
-          id="updatepassword"
           path="user/updatepassword"
-          element={<UpdatePassword />}
+          element={user ? <UpdatePassword /> : <Navigate to="/login" />}
         />
-
         <Route
-          id="mybookings"
           path="user/mybookings"
-          element={<MyBookings />}
+          element={user ? <MyBookings /> : <Navigate to="/login" />}
         />
         <Route
-          id="bookingdetails"
-          path="user/mybookings/bookingdetails"
-          element={<BookingDetails />}
+          path="user/mybookings/:bookingId"
+          element={user ? <BookingDetails /> : <Navigate to="/login" />}
         />
+        <Route path="*" element={<NotFound />} />
       </Route>
     )
   );
+
   return (
     <div className="App">
-      {/* <Home /> */}
       <RouterProvider router={router} />
     </div>
   );

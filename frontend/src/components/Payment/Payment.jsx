@@ -10,6 +10,7 @@ import {
   verifyPayment,
   initialCheckoutSession,
 } from "../../store/payment/payment-action";
+import "../../CSS/Payment.css";
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -65,7 +66,7 @@ const Payment = () => {
 
     const options = {
       key: orderData.keyId,
-      amount: orderData.amount * 100,
+      amount: orderData.amount,
       currency: orderData.currency,
       name: "Homely Hub",
       description: `Booking for ${propertyName}`,

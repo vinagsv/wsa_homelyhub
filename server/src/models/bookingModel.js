@@ -33,7 +33,7 @@ const bookingSchema = new mongoose.Schema(
     guests: {
       type: Number,
     },
-    numberOfNights: {
+    numberOfnights: {
       type: Number,
     },
   },

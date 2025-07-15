@@ -66,7 +66,7 @@ const getCheckOutSession = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      orderId: order._id,
+      orderId: order.id,
       amount: order.amount,
       currency: order.currency,
       keyId: process.env.RAZORPAY_KEY_ID,
@@ -104,20 +104,20 @@ const verifyPaymentAndCreateBooking = async (req, res) => {
     }
 
     const payment = await razorpay.payments.fetch(razorpay_payment_id);
-    if (
-      payment.status(400).json({
+    if (payment.status !== "captured") {
+      return res.status(400).json({
         status: "fail",
-        message: "payment not completed",
-      })
-    )
-      console.log("booking", bookingDetails);
+        message: "payment not complete...",
+      });
+    }
+    console.log("booking", bookingDetails);
 
     //   extract booking details from payment notes or request body
     const { propertyId, fromDate, toDate, guests, totalAmount } =
       bookingDetails;
     const fromDateMoment = moment(fromDate);
     const toDateMoment = moment(toDate);
-    const numberOfNights = toDateMoment.diff(fromDateMoment, "days");
+    const numberOfnights = toDateMoment.diff(fromDateMoment, "days");
 
     // creating booking with payment details
     const booking = await Booking.create({
@@ -126,7 +126,7 @@ const verifyPaymentAndCreateBooking = async (req, res) => {
       guests,
       fromDate,
       toDate,
-      numberOfNights,
+      numberOfnights,
       user: req.user._id,
       paymentStatus: "completed",
       razorpayOrderId: razorpay_order_id,

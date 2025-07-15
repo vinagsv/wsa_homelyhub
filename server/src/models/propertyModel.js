@@ -59,9 +59,9 @@ const propertySchema = new mongoose.Schema({
     ],
     validate: {
       validator: function (arr) {
-        return arr.length >= 5;
+        return arr.length >= 6;
       },
-      message: "The images array must contain at least 5 images",
+      message: "The images array must contain at least 6 images",
     },
   },
   price: {

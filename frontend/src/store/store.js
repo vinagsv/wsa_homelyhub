@@ -3,6 +3,8 @@ import userSlice from "./Users/user-slice";
 import propertySlice from "./Property/property-slice";
 import PropertyDetailsSlice from "./PropertyDetails/PropertyDetails-slice";
 import paymentSlice from "./payment/payment-slice";
+import bookingSlice from "./booking/booking-slice";
+import accomodationSlice from "./Accomodation/Accomodation-slice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ const store = configureStore({
     properties: propertySlice.reducer,
     propertydetails: PropertyDetailsSlice.reducer,
     payment: paymentSlice.reducer,
+    booking: bookingSlice.reducer,
+    accomodation: accomodationSlice.reducer,
   },
 });
 

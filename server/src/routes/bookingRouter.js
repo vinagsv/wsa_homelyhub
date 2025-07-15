@@ -12,7 +12,7 @@ const bookingRouter = express.Router();
 // get all the bookings made by current user
 bookingRouter.get("/", protect, getUserBookings);
 
-// get details of specific booking using bookingId
+// get details of specific booking using bookingId+
 bookingRouter.get("/:bookingId", protect, getBookingDetails);
 
 // create an new booking (must be logged in)
