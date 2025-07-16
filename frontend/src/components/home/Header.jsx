@@ -5,8 +5,8 @@ import Filter from "./Filter";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { logout } from "../../store/Users/user-action";
-import { propertyAction } from "../../store/Property/property-slice";
-import { getAllProperties } from "../../store/Property/property-action";
+import { propertyAction } from "../../store/property/property-slice";
+import { getAllProperties } from "../../store/property/property-action";
 
 const Header = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
