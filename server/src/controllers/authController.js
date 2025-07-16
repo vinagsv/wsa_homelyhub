@@ -1,4 +1,4 @@
-import { User } from "../Models/userModel.js";
+import { User } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import imagekit from "../utils/imagekitIO.js";
 import { promisify } from "util";
@@ -249,21 +249,20 @@ const resetPassword = async (req, res) => {
   }
 };
 
-const check = async(req,res)=>{
+const check = async (req, res) => {
   try {
     res.status(200).json({
-      status:"success",
-      message:"user logged In",
+      status: "success",
+      message: "user logged In",
       user: req.user,
     });
-    
   } catch (error) {
-     res.status(400).json({
+    res.status(400).json({
       status: "fail",
-      message:"unAuthorized",
+      message: "unAuthorized",
     });
   }
-}
+};
 
 export {
   signup,
@@ -274,5 +273,5 @@ export {
   updatePassword,
   forgotPassword,
   resetPassword,
-  check
+  check,
 };
