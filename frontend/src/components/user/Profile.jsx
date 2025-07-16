@@ -3,7 +3,7 @@ import ProgressSteps from "../ProgressSteps";
 import { Link } from "react-router-dom";
 import "../../CSS/Profile.css";
 import { useSelector } from "react-redux";
-import LoadingSpinner from "../Loadingspinner";
+import LoadingSpinner from "../LoadingSpinner";
 import moment from "moment";
 
 const Profile = () => {
