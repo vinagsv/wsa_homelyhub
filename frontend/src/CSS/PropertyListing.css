@@ -277,3 +277,30 @@ input:focus {
 .searchDate:hover::placeholder {
   color: black;
 }
+
+/* ============= */
+
+.login-button-link {
+  text-decoration: none;
+}
+
+.login-button {
+  background-color: #4caf50; /* green shade */
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.login-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.login-button:active {
+  background-color: #3e8e41;
+  transform: translateY(0);
+}

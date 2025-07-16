@@ -174,8 +174,8 @@ const PaymentForm = ({
 
         <div className="book-place">
           {!isAuthenticated ? (
-            <Link to="/login" style={{ textDecoration: "none" }}>
-              <button>Login to Book</button>
+            <Link to="/login" className="login-button-link">
+              <button className="login-button">Login to Book</button>
             </Link>
           ) : (
             <button type="submit">
