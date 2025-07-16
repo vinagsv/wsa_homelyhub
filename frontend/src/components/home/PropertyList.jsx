@@ -63,7 +63,7 @@ const PropertyList = () => {
   return (
     <>
       {properties.length === 0 ? (
-        <p className="not_found">Property not FOund...</p>
+        <p className="not_found">Property not Found...</p>
       ) : (
         <div className="propertylist" ref={propertyListRef}>
           {properties.map((property) => (
