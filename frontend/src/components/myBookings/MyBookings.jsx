@@ -7,7 +7,7 @@ import {
   fetchBookingDetails,
   fetchUserBookings,
 } from "../../store/booking/booking-action";
-import LoadingSpinner from "../Loadingspinner";
+import LoadingSpinner from "../LoadingSpinner";
 
 const MyBookings = () => {
   const dispatch = useDispatch();
