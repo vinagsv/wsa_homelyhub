@@ -1,11 +1,10 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { propertyAction } from "../../store/Property/property-slice";
-import { getAllProperties } from "../../store/Property/property-action";
+import { propertyAction } from "../../store/property/property-slice";
+import { getAllProperties } from "../../store/property/property-action";
 import "../../CSS/Home.css";
 import gsap from "gsap";
-
 
 const Card = ({ id, image, name, address, price }) => {
   return (
@@ -105,9 +104,7 @@ const PropertyList = () => {
           }
           disabled={properties.length < 12 || currentPage.page === lastPage}
         >
-          <span className="material-symbols-outlined">
-            arrow_forward_ios{" "}
-          </span>
+          <span className="material-symbols-outlined">arrow_forward_ios </span>
         </button>
       </div>
     </>
@@ -115,4 +112,3 @@ const PropertyList = () => {
 };
 
 export default PropertyList;
-

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import "../../CSS/BookingDetails.css";
-import PropertyImg from "../PropertyListing/PropertyImg";
+import PropertyImg from "../propertyListing/PropertyImg";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchBookingDetails } from "../../store/booking/booking-action";
-import LoadingSpinner from "../Loadingspinner";
+import LoadingSpinner from "../LoadingSpinner";
 
 const BookingDetails = () => {
   const dispatch = useDispatch();
