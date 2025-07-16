@@ -15,7 +15,7 @@ import Login from "./components/user/Login";
 import Signup from "./components/user/Signup";
 import Profile from "./components/user/Profile";
 import EditProfile from "./components/user/EditProfile";
-import MyBookings from "./components/mybookings/MyBookings";
+import MyBookings from "./components/myBookings/MyBookings";
 import BookingDetails from "./components/myBookings/BookingDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "./store/Users/user-slice";
